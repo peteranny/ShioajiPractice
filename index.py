@@ -35,22 +35,21 @@ def inputDate(msg):
         print("Must comply with YYYY-MM-DD")
 
 if __name__ == "__main__":
-    argsParser = ArgParser()
-    args = argsParser.parse_args()
+    args = ArgParser()
 
     with API(
         simulation=args.sandbox,
-        apiKey=args.api_key,
-        secretKey=args.secret_key,
-        caPath=args.ca_path,
-        caPasswd=args.ca_passwd,
-        personId=args.person_id
+        apiKey=args.apiKey,
+        secretKey=args.secretKey,
+        caPath=args.caPath,
+        caPasswd=args.caPasswd,
+        personId=args.personId
     ) as api:
 
         print("")
-        stockId = args.stock_id
-        fromDate = datetime.strptime(args.from_date, "%Y-%m-%d")
-        toDate = datetime.strptime(args.to_date, "%Y-%m-%d")
+        stockId = args.stockId
+        fromDate = datetime.strptime(args.fromDate, "%Y-%m-%d")
+        toDate = datetime.strptime(args.toDate, "%Y-%m-%d")
         allFrames = []
 
         for date in dateRange(fromDate, toDate):
