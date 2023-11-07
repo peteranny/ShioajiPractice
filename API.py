@@ -1,4 +1,5 @@
 import shioaji as sj
+import traceback
 
 class API:
     def __init__(self, simulation, apiKey, secretKey, caPath, caPasswd, personId) -> None:
@@ -26,12 +27,12 @@ class API:
         print("Connecting API...")
         return self.login()
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(self, exc_type, exc_value, tb):
         if not exc_type:
             print("Disconnecting API...")
             self.logout()
         else:
             print("Exception type:", exc_type)
             print("Exception value:", exc_value)
-            print("Traceback:", traceback)
+            traceback.print_tb(tb)
             exit(1)
