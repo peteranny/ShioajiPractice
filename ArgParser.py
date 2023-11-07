@@ -14,5 +14,7 @@ class ArgParser(configparser.ConfigParser):
         self.stockId = self["DEFAULT"]["STOCK_ID"]
         self.fromDate = self["DEFAULT"]["FROM"]
         self.toDate = self["DEFAULT"]["TO"]
+        self.orderPrice = float(self["DEFAULT"]["ORDER_PRICE"])
+        self.maDays = int(self["DEFAULT"]["MA_DAYS"])
         self.output = self["DEFAULT"]["OUTPUT"]
 
