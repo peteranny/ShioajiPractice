@@ -54,20 +54,21 @@ def sell(api, stockId, price, quantity):
     place_order(api, stockId, price, quantity, sj.constant.Action.Sell)
 
 if __name__ == "__main__":
-    args = ArgParser()
+    args = ArgParser().parse_args()
 
     with API(
-        simulation=args.sandbox,
-        apiKey=args.apiKey,
-        secretKey=args.secretKey,
-        caPath=args.caPath,
-        caPasswd=args.caPasswd,
-        personId=args.personId
+        simulation=args.sandbox != "",
+        apiKey=args.api_key,
+        secretKey=args.secret_key,
+        caPath=args.ca_path,
+        caPasswd=args.ca_passwd,
+        personId=args.person_id
     ) as api:
 
-        stockId = args.stockId
+        stockId = args.stock_id
+        maDays = args.ma_days
         toDate = date.today() - timedelta(days=1) # TODO: Should be today?
-        fromDate = toDate - timedelta(days=args.maDays)
+        fromDate = toDate - timedelta(days=maDays)
         lastDate = toDate - timedelta(days=1)
 
         # Find today's price
@@ -84,24 +85,24 @@ if __name__ == "__main__":
 
         # Find avarage prices
         print("")
-        print("Computing %dma" % (args.maDays))
+        print("Computing %dma" % (maDays))
         closes = get_closes(api, stockId, fromDate, toDate)
 
         print("")
-        print("Computing today's %dma" % (args.maDays))
+        print("Computing today's %dma" % (maDays))
         todayAvgPrice = compute_average_price(closes[0:-1])
         if todayAvgPrice is None: raise TypeError(todayAvgPrice)
 
         print("")
-        print("Computing yesterday's %dma" % (args.maDays))
+        print("Computing yesterday's %dma" % (maDays))
         lastAvgPrice = compute_average_price(closes[1:])
         if lastAvgPrice is None: raise TypeError(lastAvgPrice)
 
         # Print
         print("")
         print("=== Result ===")
-        print("Tdy - %dma: %.2f - %.2f" % (args.maDays, todayPrice, todayAvgPrice))
-        print("Lst - %dma: %.2f - %.2f" % (args.maDays, lastPrice, lastAvgPrice))
+        print("Tdy - %dma: %.2f - %.2f" % (maDays, todayPrice, todayAvgPrice))
+        print("Lst - %dma: %.2f - %.2f" % (maDays, lastPrice, lastAvgPrice))
         print("")
 
         lastDiff = lastPrice - lastAvgPrice
@@ -110,7 +111,7 @@ if __name__ == "__main__":
             # Trend changes; time to transact
 
             price = todayPrice
-            quantity = args.orderQuantity
+            quantity = args.order_quantity
             trade = None
 
             if todayDiff > 0:
